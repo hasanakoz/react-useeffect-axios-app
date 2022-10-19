@@ -1,6 +1,7 @@
 import { FaEdit } from "react-icons/fa";
 import { AiFillDelete } from "react-icons/ai";
 import axios from "axios";
+import EditTutorial from "./EditTutorial";
 
 const TutorialList = ({ tutorials, getTutorials }) => {
   const deleteTutorial = async (id) => {
@@ -8,6 +9,16 @@ const TutorialList = ({ tutorials, getTutorials }) => {
     try {
       await axios.delete(`${url}/${id}`);
       getTutorials();
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const editTutorial = async (item) => {
+    const { id, title, description } = item;
+    const url = "https://axios-example-cw.herokuapp.com/api/tutorials";
+    try {
+      await axios.put(`${url}/${id}`, { title, description });
     } catch (error) {
       console.log(error);
     }
@@ -38,7 +49,10 @@ const TutorialList = ({ tutorials, getTutorials }) => {
                   <FaEdit
                     size={20}
                     type="button"
+                    data-bs-toggle="modal"
+                    data-bs-target="#edit-modal"
                     className="me-2 text-warning"
+                    onClick={(e) => editTutorial()}
                   />
                   <AiFillDelete
                     size={22}
@@ -52,6 +66,7 @@ const TutorialList = ({ tutorials, getTutorials }) => {
           })}
         </tbody>
       </table>
+      <EditTutorial />
     </div>
   );
 };
