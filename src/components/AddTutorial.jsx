@@ -1,10 +1,26 @@
+import axios from "axios";
 import { useState } from "react";
 
-const AddTutorial = () => {
+const AddTutorial = ({ getTutorials }) => {
   const [title, setTitle] = useState("");
-  const [desc, setDesc] = useState("");
+  const [description, setDescription] = useState("");
 
-  const handleSubmit = (e) => {};
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    const newTutorial = { title: title, description: description };
+    addTutorial(newTutorial);
+    setTitle("");
+    setDescription("");
+  };
+
+  const addTutorial = async (newTutorial) => {
+    const url = "https://axios-example-cw.herokuapp.com/api/tutorials";
+    try {
+      await axios.post(url, newTutorial);
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   return (
     <div className="container text-center mt-4">
@@ -33,8 +49,8 @@ const AddTutorial = () => {
             className="form-control"
             id="desc"
             placeholder="Enter your Description"
-            value={desc}
-            onChange={(e) => setDesc(e.target.value)}
+            value={description}
+            onChange={(e) => setDescription(e.target.value)}
             required
           />
         </div>
