@@ -2,27 +2,30 @@ import { FaEdit } from "react-icons/fa";
 import { AiFillDelete } from "react-icons/ai";
 import axios from "axios";
 import EditTutorial from "./EditTutorial";
+import { useState } from "react";
 
 const TutorialList = ({ tutorials, getTutorials }) => {
+  const [editItem, setEditItem] = useState("");
+
   const deleteTutorial = async (id) => {
     const url = "https://axios-example-cw.herokuapp.com/api/tutorials";
     try {
       await axios.delete(`${url}/${id}`);
-      getTutorials();
     } catch (error) {
       console.log(error);
     }
+    getTutorials();
   };
 
-  const editTutorial = async (item) => {
-    const { id, title, description } = item;
-    const url = "https://axios-example-cw.herokuapp.com/api/tutorials";
-    try {
-      await axios.put(`${url}/${id}`, { title, description });
-    } catch (error) {
-      console.log(error);
-    }
-  };
+  // const editTutorial = async (item) => {
+  //   const { id, title, description } = item;
+  //   const url = "https://axios-example-cw.herokuapp.com/api/tutorials";
+  //   try {
+  //     await axios.put(`${url}/${id}`, { title, description });
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  // };
 
   return (
     <div className="container mt-4">
@@ -52,12 +55,12 @@ const TutorialList = ({ tutorials, getTutorials }) => {
                     data-bs-toggle="modal"
                     data-bs-target="#edit-modal"
                     className="me-2 text-warning"
-                    onClick={(e) => editTutorial()}
+                    onClick={() => setEditItem(item)}
                   />
                   <AiFillDelete
                     size={22}
                     type="button"
-                    className="text-success "
+                    className="text-success"
                     onClick={() => deleteTutorial(id)}
                   />
                 </td>
@@ -66,7 +69,7 @@ const TutorialList = ({ tutorials, getTutorials }) => {
           })}
         </tbody>
       </table>
-      <EditTutorial />
+      <EditTutorial editItem={editItem} getTutorials={getTutorials} />
     </div>
   );
 };
